@@ -1,0 +1,39 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "generic.fullname" . -}}
+{{- $svcName := $fullName -}}
+{{- $svcPort := .Values.service.port -}}
+
+{{- $common := (default dict .Values.ingress.commonAnnotations) -}}
+{{- $specific := (default dict .Values.ingress.annotations) -}}
+{{- $merged := merge (deepCopy $common) $specific -}}
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ printf "%s-%s" $fullName .Values.ingress.nameSuffix | trunc 63 | trimSuffix "-" }}
+  labels:
+    {{- include "generic.labels" . | nindent 4 }}
+  {{- if $merged }}
+  annotations:
+    {{- toYaml $merged | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.ingress.className }}
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ required "ingress.hosts[].host é obrigatório quando ingress.enabled=true" .host }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: {{ $svcName }}
+                port:
+                  number: {{ $svcPort }}
+          {{- end }}
+    {{- end }}
+{{- end }}

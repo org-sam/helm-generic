@@ -1,0 +1,6 @@
+apiVersion: v2
+name: generic-front
+description: Chart genérico para apps web
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
