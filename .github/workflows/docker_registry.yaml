@@ -22,7 +22,7 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v4
         with:
-          version: v4.0
+          version: v4.0.4
 
       - name: Login to Docker Hub (Helm OCI)
         run: |
