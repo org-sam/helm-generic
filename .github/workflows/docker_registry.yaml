@@ -1,0 +1,60 @@
+name: Release Helm Chart to Docker Hub
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'helm-generic/**'
+  workflow_dispatch:
+
+env:
+  CHART_PATH: helm-generic
+  OCI_REGISTRY: registry-1.docker.io
+
+jobs:
+  release-chart:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v4.0
+
+      - name: Login to Docker Hub (Helm OCI)
+        run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | helm registry login ${{ env.OCI_REGISTRY }} \
+            --username ${{ secrets.DOCKERHUB_USERNAME }} \
+            --password-stdin
+
+      - name: Get Chart Version
+        id: chart_version
+        run: |
+          # Extrai a versão do arquivo Chart.yaml
+          VERSION=$(grep 'version:' ${{ env.CHART_PATH }}/Chart.yaml | awk '{print $2}')
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Detected chart version: $VERSION"
+
+      - name: Package Helm Chart
+        run: |
+          helm package ${{ env.CHART_PATH }} --destination .
+
+      - name: Push Chart to Docker Hub
+        run: |
+          CHART_NAME=$(grep 'name:' ${{ env.CHART_PATH }}/Chart.yaml | awk '{print $2}')
+          VERSION=${{ steps.chart_version.outputs.VERSION }}
+          
+          # O nome do arquivo gerado é geralmente nome-versao.tgz
+          PKG_FILE="${CHART_NAME}-${VERSION}.tgz"
+          
+          if [ ! -f "$PKG_FILE" ]; then
+            echo "Error: Package file $PKG_FILE not found!"
+            exit 1
+          fi
+
+          echo "Pushing $PKG_FILE to oci://${{ env.OCI_REGISTRY }}/${{ secrets.DOCKERHUB_USERNAME }}..."
+          
+          helm push "$PKG_FILE" oci://${{ env.OCI_REGISTRY }}/${{ secrets.DOCKERHUB_USERNAME }}
