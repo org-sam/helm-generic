@@ -1,0 +1,17 @@
+{{- if .Values.autoscaling.enabled }}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ include "generic-front.fullname" . }}
+  labels:
+    {{- include "generic-front.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    name: {{ include "generic-front.fullname" . }}
+  minReplicaCount: {{ .Values.autoscaling.minReplicas }}
+  maxReplicaCount: {{ .Values.autoscaling.maxReplicas }}
+  pollingInterval: {{ .Values.autoscaling.pollingInterval | default 30 }}
+  cooldownPeriod: {{ .Values.autoscaling.cooldownPeriod | default 300 }}
+  triggers:
+    {{- toYaml .Values.autoscaling.triggers | nindent 4 }}
+{{- end }}

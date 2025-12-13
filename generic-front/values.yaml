@@ -37,3 +37,16 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  pollingInterval: 30
+  cooldownPeriod: 300
+  triggers: []
+  # Exemplo de trigger:
+  # - type: cpu
+  #   metadata:
+  #     type: Utilization
+  #     value: "50"
