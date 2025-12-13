@@ -5,11 +5,11 @@ on:
     branches:
       - main
     paths:
-      - 'helm-generic/**'
+      - 'generic-front/**'
   workflow_dispatch:
 
 env:
-  CHART_PATH: helm-generic
+  CHART_PATH: generic-front
   OCI_REGISTRY: registry-1.docker.io
 
 jobs:
