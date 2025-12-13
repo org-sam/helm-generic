@@ -2,12 +2,12 @@
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: {{ include "generic-front.fullname" . }}
+  name: {{ include "generic.fullname" . }}
   labels:
-    {{- include "generic-front.labels" . | nindent 4 }}
+    {{- include "generic.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
-    name: {{ include "generic-front.fullname" . }}
+    name: {{ include "generic.fullname" . }}
   minReplicaCount: {{ .Values.autoscaling.minReplicas }}
   maxReplicaCount: {{ .Values.autoscaling.maxReplicas }}
   pollingInterval: {{ .Values.autoscaling.pollingInterval | default 30 }}
