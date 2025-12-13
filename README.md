@@ -58,7 +58,7 @@ ingress:
 
 # KEDA (opcional)
 autoscaling:
-  enabled: true
+  enabled: false
   minReplicas: 1
   maxReplicas: 5
   triggers:
