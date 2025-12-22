@@ -5,11 +5,11 @@ on:
     branches:
       - main
     paths:
-      - 'generic-front/**'
+      - 'generic-js/**'
   workflow_dispatch:
 
 env:
-  CHART_PATH: generic-front
+  CHART_PATH: generic-js
   OCI_REGISTRY: registry-1.docker.io
 
 jobs:

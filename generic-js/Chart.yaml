@@ -1,6 +1,6 @@
 apiVersion: v2
-name: generic-front
-description: Chart genérico para apps web
+name: generic-js
+description: Chart genérico para apps javascript
 type: application
 version: 1.0.2
 appVersion: "1.0.0"
