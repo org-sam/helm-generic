@@ -50,3 +50,7 @@ autoscaling:
   #   metadata:
   #     type: Utilization
   #     value: "50"
+
+env: {}
+  # LOG_LEVEL: "debug"
+  # API_URL: "https://api.exemplo.com"
