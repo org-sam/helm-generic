@@ -18,57 +18,11 @@ generic-front/
     ├── service.yaml    # Service Kubernetes
     └── ingress.yaml    # Ingress (opcional)
     └── scaledobject.yaml    # Keda (opcional)
+    └── configmap.yaml       # ConfigMap (opcional)
+    └── externalsecret.yaml       # External Secret (opcional)
 ```
 
-## Configuração
-
-### Valores principais
-
-```yaml
-# Configuração da imagem
-image:
-  repository: "nginx"
-  tag: "latest"
-  pullPolicy: IfNotPresent
-
-# Configuração do container
-container:
-  name: "frontend"
-  port: 3000
-
-# Réplicas
-replicaCount: 1
-
-# Service
-service:
-  enabled: true
-  type: ClusterIP
-  port: 80
-  targetPort: 3000
-
-# Ingress (opcional)
-ingress:
-  enabled: false
-  className: "alb"
-  hosts:
-    - host: "exemplo.com"
-      paths:
-        - path: /
-          pathType: Prefix
-
-# KEDA (opcional)
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 5
-  triggers:
-    - type: cpu
-      metricType: Utilization
-      metadata:
-        value: "70"
-```
-
-### Exemplo de uso
+## Exemplo de uso
 
 ```bash
 helm install frontend ./generic-front \

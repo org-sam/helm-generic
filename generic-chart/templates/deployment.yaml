@@ -18,6 +18,7 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.externalSecrets.enabled }}
+        # Garante restart se a definição do ExternalSecret mudar
         checksum/secret: {{ include (print $.Template.BasePath "/external-secret.yaml") . | sha256sum }}
         {{- end }}
       labels:
@@ -35,14 +36,14 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
 
-          {{- if .Values.env }}
+          {{- if or .Values.env .Values.externalSecrets.enabled }}
           envFrom:
+            {{- if .Values.env }}
             - configMapRef:
                 name: {{ include "generic.fullname" . }}
-          {{- end }}
-
-          {{- if .Values.externalSecrets.enabled }}
+            {{- end }}
+            {{- if .Values.externalSecrets.enabled }}
             - secretRef:
                 name: {{ include "generic.fullname" . }}-secret
+            {{- end }}
           {{- end }}
-   
