@@ -54,3 +54,12 @@ autoscaling:
 env: {}
   # LOG_LEVEL: "debug"
   # API_URL: "https://api.exemplo.com"
+
+externalSecrets:
+  enabled: false
+  # Nome da secret no AWS Secrets Manager (ex: dev/app-x)
+  # Se não definido, tenta usar o fullname do chart.
+  awsSecretName: ""
+  secretStoreRef:
+    name: "aws-secrets-manager"
+    kind: ClusterSecretStore
