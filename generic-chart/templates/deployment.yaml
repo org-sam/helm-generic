@@ -14,11 +14,11 @@ spec:
   template:
     metadata:
       annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "true"
         {{- if .Values.env }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.externalSecrets.enabled }}
-        # Garante restart se a definição do ExternalSecret mudar
         checksum/secret: {{ include (print $.Template.BasePath "/external-secret.yaml") . | sha256sum }}
         {{- end }}
       labels:
