@@ -70,7 +70,7 @@ podAnnotations: {}
 opentelemetry:
   enabled: false
   type: java
-  endpoint: "http://otel-collector.monitoring.svc:4317"
+  endpoint: ""
   samplerRatio: "1.0"
   images:
     nodejs: "ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:latest"

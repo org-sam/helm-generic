@@ -1,4 +1,11 @@
 {{- if .Values.opentelemetry.enabled -}}
+{{- $defaultEndpoint := "http://otel-collector.monitoring.svc:4317" -}}
+{{- if eq .Values.opentelemetry.type "nodejs" -}}
+  {{- $defaultEndpoint = "http://otel-collector.monitoring.svc:4318" -}}
+{{- end -}}
+
+{{- $finalEndpoint := .Values.opentelemetry.endpoint | default $defaultEndpoint -}}
+
 apiVersion: opentelemetry.io/v1alpha1
 kind: Instrumentation
 metadata:
@@ -7,7 +14,7 @@ metadata:
     {{- include "generic.labels" . | nindent 4 }}
 spec:
   exporter:
-    endpoint: {{ .Values.opentelemetry.endpoint }}
+    endpoint: {{ $finalEndpoint }}
   propagators:
     - tracecontext
     - baggage
