@@ -14,12 +14,14 @@ spec:
   template:
     metadata:
       annotations:
-        instrumentation.opentelemetry.io/inject-nodejs: "true"
         {{- if .Values.env }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.externalSecrets.enabled }}
         checksum/secret: {{ include (print $.Template.BasePath "/external-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
       labels:
         {{- include "generic.selectorLabels" . | nindent 8 }}

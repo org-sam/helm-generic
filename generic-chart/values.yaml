@@ -63,3 +63,7 @@ externalSecrets:
   secretStoreRef:
     name: "aws-secrets-manager"
     kind: ClusterSecretStore
+
+# Annotations para serem injetadas especificamente na spec do POD
+# Útil para: OpenTelemetry, Prometheus scrape, Service Mesh sidecars, etc.
+podAnnotations: {}
