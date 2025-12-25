@@ -1,0 +1,31 @@
+{{- if .Values.opentelemetry.enabled -}}
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: {{ include "generic.fullname" . }}
+  labels:
+    {{- include "generic.labels" . | nindent 4 }}
+spec:
+  exporter:
+    endpoint: {{ .Values.opentelemetry.endpoint }}
+  propagators:
+    - tracecontext
+    - baggage
+  sampler:
+    type: parentbased_traceidratio
+    argument: {{ .Values.opentelemetry.samplerRatio | quote }}
+  
+  {{- if eq .Values.opentelemetry.type "nodejs" }}
+  nodejs:
+    image: {{ .Values.opentelemetry.images.nodejs }}
+  {{- else if eq .Values.opentelemetry.type "java" }}
+  java:
+    image: {{ .Values.opentelemetry.images.java }}
+  {{- else if eq .Values.opentelemetry.type "python" }}
+  python:
+    image: {{ .Values.opentelemetry.images.python }}
+  {{- else if eq .Values.opentelemetry.type "dotnet" }}
+  dotnet:
+    image: {{ .Values.opentelemetry.images.dotnet }}
+  {{- end }}
+{{- end -}}

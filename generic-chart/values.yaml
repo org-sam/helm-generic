@@ -65,5 +65,15 @@ externalSecrets:
     kind: ClusterSecretStore
 
 # Annotations para serem injetadas especificamente na spec do POD
-# Útil para: OpenTelemetry, Prometheus scrape, Service Mesh sidecars, etc.
 podAnnotations: {}
+
+opentelemetry:
+  enabled: false
+  type: java
+  endpoint: "http://otel-collector.monitoring.svc:4317"
+  samplerRatio: "1.0"
+  images:
+    nodejs: "ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:latest"
+    java: "ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:latest"
+    python: "ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-python:latest"
+    dotnet: "ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-dotnet:latest"
