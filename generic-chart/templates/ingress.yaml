@@ -1,7 +1,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "generic.fullname" . -}}
-{{- $svcName := $fullName -}}
-{{- $svcPort := .Values.service.port -}}
+{{- $svcName := .Values.ingress.backend.serviceName | default $fullName -}}
+{{- $svcPort := .Values.ingress.backend.servicePort | default .Values.service.port -}}
 
 {{- $common := (default dict .Values.ingress.commonAnnotations) -}}
 {{- $specific := (default dict .Values.ingress.annotations) -}}
@@ -11,6 +11,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ printf "%s-%s" $fullName .Values.ingress.nameSuffix | trunc 63 | trimSuffix "-" }}
+  {{- if .Values.ingress.backend.namespace }}
+  namespace: {{ .Values.ingress.backend.namespace }}
+  {{- end }}
   labels:
     {{- include "generic.labels" . | nindent 4 }}
   {{- if $merged }}

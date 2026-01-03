@@ -69,9 +69,14 @@ opentelemetry:
 ingress:
   enabled: false
   nameSuffix: ingress
-  className: ""   # ex: alb (campo spec.ingressClassName)
+  className: ""
   commonAnnotations: {}
   annotations: {}
+  # Backend customizável (se não definido, usa o service do próprio chart)
+  backend:
+    serviceName: ""  # Se vazio, usa {{ include "generic.fullname" . }}
+    servicePort: ""  # Se vazio, usa .Values.service.port
+    namespace: ""    # Opcional: para cross-namespace
   hosts:
     - host: ""
       paths:
