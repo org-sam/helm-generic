@@ -26,18 +26,6 @@ service:
   port: 80
   targetPort: 3000
 
-ingress:
-  enabled: false
-  nameSuffix: ingress
-  className: ""   # ex: alb (campo spec.ingressClassName)
-  commonAnnotations: {}
-  annotations: {}
-  hosts:
-    - host: ""
-      paths:
-        - path: /
-          pathType: Prefix
-
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -77,3 +65,24 @@ opentelemetry:
     java: "ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:latest"
     python: "ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-python:latest"
     dotnet: "ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-dotnet:latest"
+
+ingress:
+  enabled: false
+  nameSuffix: ingress
+  className: ""   # ex: alb (campo spec.ingressClassName)
+  commonAnnotations: {}
+  annotations: {}
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: Prefix
+
+istio:
+  enabled: false
+  gateway: "istio-system/shared-gateway"
+  host: ""
+  destinationPort: 3000
+
+namespace:
+  istioInjection: false
