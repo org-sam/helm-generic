@@ -1,8 +1,8 @@
-{{- if .Values.namespace.istioInjection }}
 apiVersion: v1
 kind: Namespace
 metadata:
   name: {{ .Release.Namespace }}
+  {{- if .Values.namespace.istioInjection }}
   labels:
     istio-injection: enabled
-{{- end }}
+  {{- end }}
